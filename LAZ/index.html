@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAZ - Local de Armazenamento de Zona de Comprovantes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Tela de Login -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h1 class="system-title">LAZ</h1>
+                <p class="system-subtitle">Local de Armazenamento de Zona de Comprovantes</p>
+                <p class="company-name">PORTES ADVOGADOS</p>
+            </div>
+            
+            <div class="login-card">
+                <h2>Entrar no Sistema</h2>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Usuário" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="Senha" required>
+                    </div>
+                    <div class="input-group">
+                        <select id="userType" required>
+                            <option value="">Selecione o tipo de usuário</option>
+                            <option value="conciliador">Conciliador</option>
+                            <option value="supervisor">Supervisor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <span>Entrar</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tela Principal -->
+    <div id="mainScreen" class="screen">
+        <!-- Menu Superior -->
+        <nav class="top-menu">
+            <div class="menu-left">
+                <div class="logo-mini">
+                    <i class="fas fa-shield-alt"></i>
+                    <div class="logo-text">
+                        <span class="logo-sigla">LAZ</span>
+                        <span class="logo-company">PORTES ADVOGADOS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-right">
+                <button class="menu-btn search-btn" onclick="abrirBusca()" title="Busca Global (Ctrl+F)">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="menu-btn favorites-btn" onclick="showScreen('favoritos')" title="Favoritos">
+                    <i class="fas fa-star"></i>
+                </button>
+                <button class="menu-btn active" onclick="showScreen('dashboard')" id="btn-dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </button>
+                <button class="menu-btn" onclick="showScreen('comprovantes')" id="btn-comprovantes">
+                    <i class="fas fa-file-invoice"></i>
+                    Meus Comprovantes
+                </button>
+                <button class="menu-btn" onclick="showScreen('supervisor-dashboard')" id="btn-supervisor" style="display: none;">
+                    <i class="fas fa-user-tie"></i>
+                    Supervisor
+                </button>
+                <button class="menu-btn" onclick="showScreen('admin-dashboard')" id="btn-admin" style="display: none;">
+                    <i class="fas fa-crown"></i>
+                    Admin
+                </button>
+                <button class="menu-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </button>
+            </div>
+        </nav>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="content-screen active">
+            <div class="dashboard-container">
+                <h1 class="page-title">Dashboard</h1>
+                
+                <!-- Indicador de Scroll -->
+                <div class="scroll-indicator" id="scrollIndicator">
+                    <div class="scroll-text">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Role para baixo para ver mais informações</span>
+                    </div>
+                    <div class="scroll-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+                
+                <!-- KPIs Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Total de Comprovantes</h3>
+                            <span class="kpi-value">247</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Valor Total Acumulado</h3>
+                            <span class="kpi-value">R$ 45.230,50</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Posição no Ranking</h3>
+                            <span class="kpi-value">3º de 15</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Média por Boleto</h3>
+                            <span class="kpi-value">R$ 183,12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Evolução Mensal</h3>
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Desempenho Últimos 7 Dias</h3>
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Ranking Top 10 -->
+                <div class="ranking-section">
+                    <h3>Top 10 Maiores Comprovantes</h3>
+                    <div class="ranking-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Posição</th>
+                                    <th>Data</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1º</td>
+                                    <td>15/12/2024</td>
+                                    <td>R$ 2.500,00</td>
+                                    <td>
+                                        <button class="action-btn view" title="Visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn download" title="Baixar">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2º</td>
+                                    <td>12/12/2024</td>
+                                    <td>R$ 2.200,00</td>
+                                    <td>
+                                        <button class="action-btn view" title="Visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn download" title="Baixar">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3º</td>
+                                    <td>10/12/2024</td>
+                                    <td>R$ 1.800,00</td>
+                                    <td>
+                                        <button class="action-btn view" title="Visualizar">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn download" title="Baixar">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meus Comprovantes -->
+        <div id="comprovantes" class="content-screen">
+            <div class="comprovantes-container">
+                <h1 class="page-title">Meus Comprovantes</h1>
+                
+                <!-- Filtros -->
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <label>Data Inicial:</label>
+                        <input type="date" id="dataInicial">
+                    </div>
+                    <div class="filter-group">
+                        <label>Data Final:</label>
+                        <input type="date" id="dataFinal">
+                    </div>
+                    <div class="filter-group">
+                        <label>Valor Mínimo:</label>
+                        <input type="number" id="valorMinimo" placeholder="0,00">
+                    </div>
+                    <div class="filter-group">
+                        <label>Valor Máximo:</label>
+                        <input type="number" id="valorMaximo" placeholder="0,00">
+                    </div>
+                    <button class="filter-btn" onclick="aplicarFiltros()">
+                        <i class="fas fa-search"></i>
+                        Filtrar
+                    </button>
+                </div>
+
+                <!-- Tabela de Comprovantes -->
+                <div class="table-container">
+                    <table class="comprovantes-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#001</td>
+                                <td>15/12/2024</td>
+                                <td>R$ 2.500,00</td>
+                                <td><span class="status approved">Aprovado</span></td>
+                                <td>
+                                    <button class="action-btn view" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn download" title="Baixar">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="action-btn favorite" onclick="toggleFavorito('#001')" title="Adicionar aos Favoritos">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#002</td>
+                                <td>12/12/2024</td>
+                                <td>R$ 1.200,00</td>
+                                <td><span class="status pending">Pendente</span></td>
+                                <td>
+                                    <button class="action-btn view" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn download" title="Baixar">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="action-btn favorite" onclick="toggleFavorito('#002')" title="Adicionar aos Favoritos">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#003</td>
+                                <td>10/12/2024</td>
+                                <td>R$ 800,00</td>
+                                <td><span class="status approved">Aprovado</span></td>
+                                <td>
+                                    <button class="action-btn view" title="Visualizar">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn download" title="Baixar">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="action-btn favorite" onclick="toggleFavorito('#003')" title="Adicionar aos Favoritos">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Supervisor -->
+        <div id="supervisor-dashboard" class="content-screen">
+            <div class="dashboard-container">
+                <h1 class="page-title">Dashboard Supervisor</h1>
+                
+                <!-- KPIs do Supervisor -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Total de Conciliadores</h3>
+                            <span class="kpi-value">15</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Comprovantes Pendentes</h3>
+                            <span class="kpi-value">47</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Valor Total Pendente</h3>
+                            <span class="kpi-value">R$ 125.430,50</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Eficiência Geral</h3>
+                            <span class="kpi-value">87%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos do Supervisor -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Performance por Conciliador</h3>
+                        <canvas id="supervisorChart1"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Status dos Comprovantes</h3>
+                        <canvas id="supervisorChart2"></canvas>
+                    </div>
+                </div>
+
+                <!-- Tabela de Conciliadores -->
+                <div class="ranking-section">
+                    <h3>Ranking de Conciliadores</h3>
+                    <div class="ranking-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Posição</th>
+                                    <th>Nome</th>
+                                    <th>Comprovantes</th>
+                                    <th>Valor Total</th>
+                                    <th>Eficiência</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1º</td>
+                                    <td>João Silva</td>
+                                    <td>89</td>
+                                    <td>R$ 45.230,50</td>
+                                    <td><span class="status approved">95%</span></td>
+                                    <td>
+                                        <button class="action-btn view" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2º</td>
+                                    <td>Maria Santos</td>
+                                    <td>76</td>
+                                    <td>R$ 38.120,00</td>
+                                    <td><span class="status approved">92%</span></td>
+                                    <td>
+                                        <button class="action-btn view" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3º</td>
+                                    <td>Pedro Costa</td>
+                                    <td>68</td>
+                                    <td>R$ 32.450,75</td>
+                                    <td><span class="status pending">88%</span></td>
+                                    <td>
+                                        <button class="action-btn view" title="Ver Detalhes">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Favoritos -->
+        <div id="favoritos" class="content-screen">
+            <div class="favoritos-container">
+                <h1 class="page-title">Comprovantes Favoritos</h1>
+                
+                <div class="favoritos-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <span class="stat-number" id="totalFavoritos">0</span>
+                        <span class="stat-label">Total de Favoritos</span>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span class="stat-number" id="valorFavoritos">R$ 0,00</span>
+                        <span class="stat-label">Valor Total</span>
+                    </div>
+                </div>
+
+                <div class="favoritos-list" id="favoritosList">
+                    <div class="empty-favorites">
+                        <i class="fas fa-star"></i>
+                        <h3>Nenhum favorito ainda</h3>
+                        <p>Marque comprovantes como favoritos para vê-los aqui</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Admin -->
+        <div id="admin-dashboard" class="content-screen">
+            <div class="dashboard-container">
+                <h1 class="page-title">Dashboard Administrador</h1>
+                
+                <!-- KPIs do Admin -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Total de Supervisores</h3>
+                            <span class="kpi-value">5</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Total de Usuários</h3>
+                            <span class="kpi-value">75</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Comprovantes Totais</h3>
+                            <span class="kpi-value">1.247</span>
+                        </div>
+                    </div>
+                    
+                    <div class="kpi-card">
+                        <div class="kpi-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Valor Total Sistema</h3>
+                            <span class="kpi-value">R$ 2.145.230,50</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos do Admin -->
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Evolução Geral do Sistema</h3>
+                        <canvas id="adminChart1"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Distribuição por Região</h3>
+                        <canvas id="adminChart2"></canvas>
+                    </div>
+                </div>
+
+                <!-- Controles Administrativos -->
+                <div class="admin-controls">
+                    <h3>Controles Administrativos</h3>
+                    <div class="controls-grid">
+                        <button class="control-btn" onclick="gerenciarUsuarios()">
+                            <i class="fas fa-user-cog"></i>
+                            Gerenciar Usuários
+                        </button>
+                        <button class="control-btn" onclick="relatorios()">
+                            <i class="fas fa-chart-bar"></i>
+                            Relatórios
+                        </button>
+                        <button class="control-btn" onclick="configuracoes()">
+                            <i class="fas fa-cog"></i>
+                            Configurações
+                        </button>
+                        <button class="control-btn" onclick="backup()">
+                            <i class="fas fa-database"></i>
+                            Backup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização de Comprovante -->
+    <div id="comprovanteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Visualizar Comprovante</h2>
+                <button class="modal-close" onclick="fecharModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="comprovante-info">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>ID:</label>
+                            <span id="modalId">#001</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Data:</label>
+                            <span id="modalData">15/12/2024</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Valor:</label>
+                            <span id="modalValor">R$ 2.500,00</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Status:</label>
+                            <span id="modalStatus" class="status approved">Aprovado</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Categoria:</label>
+                            <span id="modalCategoria">Boleto Bancário</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Observações:</label>
+                            <span id="modalObservacoes">Comprovante de pagamento referente ao mês de dezembro</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="comprovante-preview">
+                    <div class="preview-container">
+                        <div class="preview-placeholder">
+                            <i class="fas fa-file-image"></i>
+                            <p>Preview do Comprovante</p>
+                            <small>Clique para ampliar</small>
+                        </div>
+                        <div class="preview-actions">
+                            <button class="action-btn zoom" onclick="zoomComprovante()">
+                                <i class="fas fa-search-plus"></i>
+                                Ampliar
+                            </button>
+                            <button class="action-btn rotate" onclick="rotacionarComprovante()">
+                                <i class="fas fa-redo"></i>
+                                Rotacionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="fecharModal()">
+                    <i class="fas fa-times"></i>
+                    Fechar
+                </button>
+                <button class="btn-primary" onclick="aprovarComprovante()">
+                    <i class="fas fa-check"></i>
+                    Aprovar
+                </button>
+                <button class="btn-danger" onclick="rejeitarComprovante()">
+                    <i class="fas fa-times"></i>
+                    Rejeitar
+                </button>
+                <button class="btn-download" onclick="baixarComprovanteModal()">
+                    <i class="fas fa-download"></i>
+                    Baixar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema de Busca Global -->
+    <div id="searchOverlay" class="search-overlay">
+        <div class="search-container">
+            <div class="search-header">
+                <h3>Busca Global</h3>
+                <button class="search-close" onclick="fecharBusca()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-input-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="Digite para buscar comprovantes..." autocomplete="off">
+                <button class="search-clear" onclick="limparBusca()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-filters">
+                <select id="searchFilter">
+                    <option value="todos">Todos os campos</option>
+                    <option value="id">ID</option>
+                    <option value="data">Data</option>
+                    <option value="valor">Valor</option>
+                    <option value="status">Status</option>
+                </select>
+                <input type="date" id="searchDateFrom" placeholder="Data inicial">
+                <input type="date" id="searchDateTo" placeholder="Data final">
+            </div>
+            <div class="search-results" id="searchResults">
+                <div class="search-placeholder">
+                    <i class="fas fa-search"></i>
+                    <p>Digite algo para começar a buscar</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
