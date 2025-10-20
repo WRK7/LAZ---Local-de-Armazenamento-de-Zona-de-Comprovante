@@ -111,6 +111,61 @@ const adminRegionData = {
     }]
 };
 
+// Dados Financeiros simulados
+const financeCategoryData = {
+    labels: ['PIX', 'Boleto', 'Transferência', 'Cartão'],
+    datasets: [{
+        data: [42000, 25500, 18000, 9500],
+        backgroundColor: [
+            'rgba(46, 213, 115, 0.8)',
+            'rgba(0, 191, 255, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(255, 99, 132, 0.8)'
+        ],
+        borderColor: [
+            '#2ed573', '#00bfff', '#ffce56', '#ff6384'
+        ],
+        borderWidth: 2
+    }]
+};
+
+const financeDailyData = {
+    labels: Array.from({ length: 30 }, (_, i) => `${i + 1}`),
+    datasets: [{
+        label: 'Receita (R$)',
+        data: Array.from({ length: 30 }, () => Math.floor(200 + Math.random() * 900)),
+        borderColor: '#00bfff',
+        backgroundColor: 'rgba(0, 191, 255, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+// Dados de Qualidade simulados
+const qualityApprovalData = {
+    labels: ['Aprovados', 'Rejeitados'],
+    datasets: [{
+        data: [78, 22],
+        backgroundColor: ['rgba(0, 255, 0, 0.8)', 'rgba(255, 0, 0, 0.8)'],
+        borderColor: ['#00ff00', '#ff0000'],
+        borderWidth: 2
+    }]
+};
+
+const qualityTMAWeeklyData = {
+    labels: ['Sem1', 'Sem2', 'Sem3', 'Sem4'],
+    datasets: [{
+        label: 'TMA (minutos)',
+        data: [18, 22, 17, 15],
+        borderColor: '#ffce56',
+        backgroundColor: 'rgba(255, 206, 86, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -119,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSearch();
     initializeKeyboardShortcuts();
     initializeFavoritos();
+    // Render inicial da tabela de comprovantes ao carregar (se visível depois do login)
 });
 
 function initializeApp() {
@@ -173,18 +229,25 @@ function configureUserMenu(userType) {
     const btnSupervisor = document.getElementById('btn-supervisor');
     const btnAdmin = document.getElementById('btn-admin');
     const btnComprovantes = document.getElementById('btn-comprovantes');
+    const btnFinance = document.getElementById('btn-finance');
+    const btnQuality = document.getElementById('btn-quality');
     
     // Esconder todos os botões específicos primeiro
     if (btnSupervisor) btnSupervisor.style.display = 'none';
     if (btnAdmin) btnAdmin.style.display = 'none';
+    if (btnFinance) btnFinance.style.display = 'none';
+    if (btnQuality) btnQuality.style.display = 'none';
     
     // Mostrar botões baseado no tipo de usuário
     switch(userType) {
         case 'supervisor':
             if (btnSupervisor) btnSupervisor.style.display = 'flex';
+            if (btnQuality) btnQuality.style.display = 'flex';
             break;
         case 'admin':
             if (btnAdmin) btnAdmin.style.display = 'flex';
+            if (btnFinance) btnFinance.style.display = 'flex';
+            if (btnQuality) btnQuality.style.display = 'flex';
             break;
         case 'conciliador':
             // Conciliador só vê dashboard e comprovantes
@@ -231,14 +294,11 @@ function showScreen(screenName) {
             targetScreen.classList.add('active');
         }
         
-        // Atualizar menu ativo
+        // Atualizar menu ativo (preferir data-screen)
         const menuBtns = document.querySelectorAll('.menu-btn');
         menuBtns.forEach(btn => btn.classList.remove('active'));
-        
-        const activeBtn = document.querySelector(`[onclick="showScreen('${screenName}')"]`);
-        if (activeBtn) {
-            activeBtn.classList.add('active');
-        }
+        const activeBtn = document.querySelector(`.menu-btn[data-screen="${screenName}"]`) || document.querySelector(`[onclick="showScreen('${screenName}')"]`);
+        if (activeBtn) activeBtn.classList.add('active');
         
         currentScreen = screenName;
         
@@ -246,6 +306,9 @@ function showScreen(screenName) {
         setTimeout(() => {
             if (screenName === 'dashboard' || screenName === 'supervisor-dashboard' || screenName === 'admin-dashboard') {
                 initializeCharts();
+            }
+            if (screenName === 'comprovantes') {
+                renderComprovantesTable(comprovantesData);
             }
         }, 300);
     }
@@ -363,6 +426,10 @@ function initializeCharts() {
         
         // Gráficos do Admin
         initializeAdminCharts();
+
+        // Gráficos Financeiros e Qualidade
+        initializeFinanceCharts();
+        initializeQualityCharts();
     }, 200);
 }
 
@@ -502,6 +569,95 @@ function initializeAdminCharts() {
     }
 }
 
+// Inicializar gráficos Financeiro
+function initializeFinanceCharts() {
+    const financeChart1Ctx = document.getElementById('financeChart1');
+    if (financeChart1Ctx && financeChart1Ctx.offsetParent !== null) {
+        chartInstances.financeChart1 = new Chart(financeChart1Ctx, {
+            type: 'doughnut',
+            data: financeCategoryData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } }
+            }
+        });
+    }
+    const financeChart2Ctx = document.getElementById('financeChart2');
+    if (financeChart2Ctx && financeChart2Ctx.offsetParent !== null) {
+        chartInstances.financeChart2 = new Chart(financeChart2Ctx, {
+            type: 'line',
+            data: financeDailyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    // KPIs simulados (exemplo)
+    const receitaMes = financeDailyData.datasets[0].data.reduce((a, b) => a + b, 0);
+    const ticketMedio = receitaMes / Math.max(1, financeDailyData.datasets[0].data.length);
+    const crescimento = 12; // placeholder
+    const kpiReceita = document.getElementById('kpiReceitaMes');
+    const kpiTicket = document.getElementById('kpiTicketMedio');
+    const kpiCresc = document.getElementById('kpiCrescimento');
+    const kpiCats = document.getElementById('kpiCategorias');
+    if (kpiReceita) kpiReceita.textContent = `R$ ${receitaMes.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    if (kpiTicket) kpiTicket.textContent = `R$ ${ticketMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    if (kpiCresc) kpiCresc.textContent = `${crescimento}%`;
+    if (kpiCats) kpiCats.textContent = financeCategoryData.labels.length;
+}
+
+// Inicializar gráficos Qualidade
+function initializeQualityCharts() {
+    const qualityChart1Ctx = document.getElementById('qualityChart1');
+    if (qualityChart1Ctx && qualityChart1Ctx.offsetParent !== null) {
+        chartInstances.qualityChart1 = new Chart(qualityChart1Ctx, {
+            type: 'pie',
+            data: qualityApprovalData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } }
+            }
+        });
+    }
+    const qualityChart2Ctx = document.getElementById('qualityChart2');
+    if (qualityChart2Ctx && qualityChart2Ctx.offsetParent !== null) {
+        chartInstances.qualityChart2 = new Chart(qualityChart2Ctx, {
+            type: 'line',
+            data: qualityTMAWeeklyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    // KPIs simulados (exemplo)
+    const aprov = qualityApprovalData.datasets[0].data[0];
+    const reje = qualityApprovalData.datasets[0].data[1];
+    const taxaAprovacao = Math.round((aprov / (aprov + reje)) * 100);
+    const tma = qualityTMAWeeklyData.datasets[0].data.slice(-1)[0];
+    const kpiAprov = document.getElementById('kpiAprovacao');
+    const kpiTMA = document.getElementById('kpiTMA');
+    const kpiAlertas = document.getElementById('kpiAlertas');
+    const kpiRevisoes = document.getElementById('kpiRevisoes');
+    if (kpiAprov) kpiAprov.textContent = `${taxaAprovacao}%`;
+    if (kpiTMA) kpiTMA.textContent = `${tma}m`;
+    if (kpiAlertas) kpiAlertas.textContent = `${reje}`;
+    if (kpiRevisoes) kpiRevisoes.textContent = `${Math.max(0, reje - 5)}`;
+}
+
 // Aplicar filtros
 function aplicarFiltros() {
     const dataInicial = document.getElementById('dataInicial').value;
@@ -509,16 +665,49 @@ function aplicarFiltros() {
     const valorMinimo = document.getElementById('valorMinimo').value;
     const valorMaximo = document.getElementById('valorMaximo').value;
     
-    // Simular aplicação de filtros
-    showNotification('Filtros aplicados com sucesso!', 'success');
+    // Normalizações
+    const parseISODate = (iso) => iso ? new Date(iso + 'T00:00:00') : null; // yyyy-mm-dd
+    const parseDisplayDate = (ddmmyyyy) => {
+        if (!ddmmyyyy) return null;
+        const [d, m, y] = ddmmyyyy.split('/').map(Number);
+        return new Date(y, m - 1, d);
+    };
+    const parseBRLNumberInput = (value) => {
+        if (!value) return null;
+        // aceita 1000,50 | 1000.50 | 1000
+        const normalized = value
+            .toString()
+            .replace(/\./g, '')
+            .replace(/,/g, '.');
+        const n = parseFloat(normalized);
+        return Number.isFinite(n) ? n : null;
+    };
+    const parseBRLText = (text) => {
+        if (!text) return 0;
+        return parseFloat(
+            text.replace(/R\$\s?/g, '').replace(/\./g, '').replace(',', '.')
+        ) || 0;
+    };
     
-    // Aqui você implementaria a lógica real de filtro
-    console.log('Filtros aplicados:', {
-        dataInicial,
-        dataFinal,
-        valorMinimo,
-        valorMaximo
+    const dtIni = parseISODate(dataInicial);
+    const dtFim = parseISODate(dataFinal);
+    const vMin = parseBRLNumberInput(valorMinimo);
+    const vMax = parseBRLNumberInput(valorMaximo);
+    
+    const filtrados = comprovantesData.filter((c) => {
+        // Data
+        const d = parseDisplayDate(c.data);
+        if (dtIni && d < dtIni) return false;
+        if (dtFim && d > dtFim) return false;
+        // Valor
+        const v = parseBRLText(c.valor);
+        if (vMin != null && v < vMin) return false;
+        if (vMax != null && v > vMax) return false;
+        return true;
     });
+    
+    renderComprovantesTable(filtrados);
+    showNotification('Filtros aplicados com sucesso!', 'success');
 }
 
 // Sistema de notificações
@@ -587,6 +776,34 @@ function visualizarComprovante(id) {
 function baixarComprovante(id) {
     showNotification(`Baixando comprovante ${id}`, 'success');
     // Implementar download
+}
+
+// Renderização da tabela de comprovantes
+function renderComprovantesTable(lista) {
+    const tbody = document.querySelector('#comprovantes .comprovantes-table tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    (lista && lista.length ? lista : comprovantesData).forEach((c) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${c.id}</td>
+            <td>${c.data}</td>
+            <td>${c.valor}</td>
+            <td><span class="status ${c.status.toLowerCase().replace(' ', '')}">${c.status}</span></td>
+            <td>
+                <button class="action-btn view" title="Visualizar">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="action-btn download" title="Baixar">
+                    <i class="fas fa-download"></i>
+                </button>
+                <button class="action-btn favorite" onclick="toggleFavorito('${c.id}')" title="Adicionar aos Favoritos">
+                    <i class="fas fa-star"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 // Adicionar event listeners para botões de ação
@@ -986,10 +1203,12 @@ function atualizarPaginaFavoritos() {
     
     if (valorFavoritos) {
         const valorTotal = favoritos.reduce((total, fav) => {
-            const valor = parseFloat(fav.valor.replace('R$ ', '').replace(',', '.'));
+            const valor = parseFloat(
+                fav.valor.replace(/R\$\s?/g, '').replace(/\./g, '').replace(',', '.')
+            ) || 0;
             return total + valor;
         }, 0);
-        valorFavoritos.textContent = `R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        valorFavoritos.textContent = `R$ ${valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
     
     if (favoritosList) {

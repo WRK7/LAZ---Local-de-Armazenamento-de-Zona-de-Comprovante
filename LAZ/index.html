@@ -69,19 +69,27 @@
                 <button class="menu-btn favorites-btn" onclick="showScreen('favoritos')" title="Favoritos">
                     <i class="fas fa-star"></i>
                 </button>
-                <button class="menu-btn active" onclick="showScreen('dashboard')" id="btn-dashboard">
+                <button class="menu-btn active" onclick="showScreen('dashboard')" id="btn-dashboard" data-screen="dashboard">
                     <i class="fas fa-chart-line"></i>
                     Dashboard
                 </button>
-                <button class="menu-btn" onclick="showScreen('comprovantes')" id="btn-comprovantes">
+                <button class="menu-btn" onclick="showScreen('comprovantes')" id="btn-comprovantes" data-screen="comprovantes">
                     <i class="fas fa-file-invoice"></i>
                     Meus Comprovantes
                 </button>
-                <button class="menu-btn" onclick="showScreen('supervisor-dashboard')" id="btn-supervisor" style="display: none;">
+                <button class="menu-btn" onclick="showScreen('finance-dashboard')" id="btn-finance" style="display: none;" data-screen="finance-dashboard">
+                    <i class="fas fa-sack-dollar"></i>
+                    Financeiro
+                </button>
+                <button class="menu-btn" onclick="showScreen('quality-dashboard')" id="btn-quality" style="display: none;" data-screen="quality-dashboard">
+                    <i class="fas fa-bullseye"></i>
+                    Qualidade
+                </button>
+                <button class="menu-btn" onclick="showScreen('supervisor-dashboard')" id="btn-supervisor" style="display: none;" data-screen="supervisor-dashboard">
                     <i class="fas fa-user-tie"></i>
                     Supervisor
                 </button>
-                <button class="menu-btn" onclick="showScreen('admin-dashboard')" id="btn-admin" style="display: none;">
+                <button class="menu-btn" onclick="showScreen('admin-dashboard')" id="btn-admin" style="display: none;" data-screen="admin-dashboard">
                     <i class="fas fa-crown"></i>
                     Admin
                 </button>
@@ -436,6 +444,76 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Financeiro -->
+        <div id="finance-dashboard" class="content-screen">
+            <div class="dashboard-container">
+                <h1 class="page-title">Dashboard Financeiro</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-wallet"></i></div>
+                        <div class="kpi-content"><h3>Receita do Mês</h3><span class="kpi-value" id="kpiReceitaMes">R$ 0,00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="kpi-content"><h3>Crescimento vs Mês Anterior</h3><span class="kpi-value" id="kpiCrescimento">0%</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-receipt"></i></div>
+                        <div class="kpi-content"><h3>Ticket Médio</h3><span class="kpi-value" id="kpiTicketMedio">R$ 0,00</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-coins"></i></div>
+                        <div class="kpi-content"><h3>Receitas por Categoria</h3><span class="kpi-value" id="kpiCategorias">3</span></div>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Receita por Categoria</h3>
+                        <canvas id="financeChart1"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Receita Diária (últimos 30 dias)</h3>
+                        <canvas id="financeChart2"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Qualidade -->
+        <div id="quality-dashboard" class="content-screen">
+            <div class="dashboard-container">
+                <h1 class="page-title">Dashboard de Qualidade</h1>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-percentage"></i></div>
+                        <div class="kpi-content"><h3>Taxa de Aprovação</h3><span class="kpi-value" id="kpiAprovacao">0%</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-hourglass-half"></i></div>
+                        <div class="kpi-content"><h3>Tempo Médio de Análise</h3><span class="kpi-value" id="kpiTMA">0m</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                        <div class="kpi-content"><h3>Alertas de Inconsistência</h3><span class="kpi-value" id="kpiAlertas">0</span></div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon"><i class="fas fa-shield-halved"></i></div>
+                        <div class="kpi-content"><h3>Revisões Necessárias</h3><span class="kpi-value" id="kpiRevisoes">0</span></div>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Aprovação vs Rejeição</h3>
+                        <canvas id="qualityChart1"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>TMA por Semana</h3>
+                        <canvas id="qualityChart2"></canvas>
                     </div>
                 </div>
             </div>

@@ -114,3 +114,10 @@ Resolver o problema de comprovantes desaparecidos dos conciliadores, proporciona
 ---
 
 **Desenvolvido para Portes Advogados** 🏛️
+
+---
+
+### 📚 Documentação
+- [CHANGELOG](./CHANGELOG.md)
+- [Guia do Front-end](./docs/FRONTEND_GUIDE.md)
+- [Dashboards](./docs/DASHBOARDS.md)
