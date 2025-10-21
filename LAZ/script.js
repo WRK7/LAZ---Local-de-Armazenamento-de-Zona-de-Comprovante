@@ -166,6 +166,334 @@ const qualityTMAWeeklyData = {
     }]
 };
 
+// Novos datasets para gráficos extras
+const trendData = {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    datasets: [{
+        label: 'Crescimento (%)',
+        data: [5, 8, 12, 15, 18, 22, 25, 28, 30, 32, 35, 38],
+        borderColor: '#2ed573',
+        backgroundColor: 'rgba(46, 213, 115, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+const hourlyData = {
+    labels: ['00h', '02h', '04h', '06h', '08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'],
+    datasets: [{
+        label: 'Atividade',
+        data: [2, 1, 0, 1, 8, 15, 25, 30, 28, 20, 12, 5],
+        backgroundColor: 'rgba(0, 191, 255, 0.8)',
+        borderColor: '#00bfff',
+        borderWidth: 1
+    }]
+};
+
+const supervisorEfficiencyData = {
+    labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+    datasets: [{
+        label: 'Eficiência (%)',
+        data: [85, 92, 88, 95, 90, 75, 60],
+        borderColor: '#ff6b6b',
+        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+const supervisorMonthlyComparisonData = {
+    labels: ['Mês Anterior', 'Mês Atual'],
+    datasets: [{
+        label: 'Comprovantes',
+        data: [120, 145],
+        backgroundColor: ['rgba(0, 191, 255, 0.8)', 'rgba(46, 213, 115, 0.8)'],
+        borderColor: ['#00bfff', '#2ed573'],
+        borderWidth: 1
+    }]
+};
+
+const adminGeographicData = {
+    labels: ['SP', 'RJ', 'MG', 'RS', 'PR', 'SC', 'BA', 'GO'],
+    datasets: [{
+        label: 'Comprovantes',
+        data: [450, 320, 280, 180, 150, 120, 95, 80],
+        backgroundColor: 'rgba(0, 191, 255, 0.8)',
+        borderColor: '#00bfff',
+        borderWidth: 1
+    }]
+};
+
+const adminSeasonalityData = {
+    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    datasets: [{
+        label: 'Comprovantes',
+        data: [280, 320, 350, 380],
+        borderColor: '#ffce56',
+        backgroundColor: 'rgba(255, 206, 86, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+const financeQuarterlyData = {
+    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+    datasets: [{
+        label: 'Receita (R$ mil)',
+        data: [85, 95, 110, 125],
+        borderColor: '#2ed573',
+        backgroundColor: 'rgba(46, 213, 115, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+const financeProjectionData = {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+    datasets: [{
+        label: 'Real',
+        data: [25, 28, 32, 35, null, null],
+        borderColor: '#00bfff',
+        backgroundColor: 'rgba(0, 191, 255, 0.1)',
+        borderWidth: 2,
+        fill: false
+    }, {
+        label: 'Projeção',
+        data: [null, null, null, 35, 38, 42],
+        borderColor: '#ff6b6b',
+        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        fill: false
+    }]
+};
+
+const qualityErrorByCategoryData = {
+    labels: ['PIX', 'Boleto', 'Transferência', 'Cartão'],
+    datasets: [{
+        label: 'Taxa de Erro (%)',
+        data: [2, 5, 3, 8],
+        backgroundColor: ['rgba(255, 99, 132, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 159, 64, 0.8)'],
+        borderColor: ['#ff6384', '#ffce56', '#36a2eb', '#ff9f40'],
+        borderWidth: 2
+    }]
+};
+
+const qualityEvolutionData = {
+    labels: ['Sem1', 'Sem2', 'Sem3', 'Sem4'],
+    datasets: [{
+        label: 'Taxa de Aprovação (%)',
+        data: [75, 78, 82, 85],
+        borderColor: '#2ed573',
+        backgroundColor: 'rgba(46, 213, 115, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+// Dados de Performance
+const performanceHourlyData = {
+    labels: ['00h', '02h', '04h', '06h', '08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'],
+    datasets: [{
+        label: 'Performance (ops/min)',
+        data: [5, 3, 2, 4, 12, 18, 25, 28, 30, 22, 15, 8],
+        borderColor: '#ff6b6b',
+        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+const performanceMetricsData = {
+    labels: ['Velocidade', 'Precisão', 'Eficiência', 'Disponibilidade'],
+    datasets: [{
+        label: 'Score (%)',
+        data: [85, 92, 88, 95],
+        backgroundColor: ['rgba(46, 213, 115, 0.8)', 'rgba(0, 191, 255, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(255, 99, 132, 0.8)'],
+        borderColor: ['#2ed573', '#00bfff', '#ffce56', '#ff6384'],
+        borderWidth: 2
+    }]
+};
+
+const performanceHeatmapData = {
+    labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
+    datasets: [{
+        label: 'Atividade',
+        data: [85, 92, 88, 95, 90],
+        backgroundColor: ['rgba(46, 213, 115, 0.8)', 'rgba(0, 191, 255, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(255, 99, 132, 0.8)', 'rgba(46, 213, 115, 0.8)'],
+        borderColor: ['#2ed573', '#00bfff', '#ffce56', '#ff6384', '#2ed573'],
+        borderWidth: 2
+    }]
+};
+
+const performanceTrendData = {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+    datasets: [{
+        label: 'Performance Index',
+        data: [75, 78, 82, 85, 88, 92],
+        borderColor: '#2ed573',
+        backgroundColor: 'rgba(46, 213, 115, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
+// Novos datasets para gráficos sugeridos
+const valueDistributionData = {
+    labels: ['R$ 0-100', 'R$ 100-500', 'R$ 500-1000', 'R$ 1000-2000', 'R$ 2000+'],
+    datasets: [{
+        label: 'Quantidade de Comprovantes',
+        data: [45, 78, 52, 28, 15],
+        backgroundColor: [
+            'rgba(0, 191, 255, 0.8)',
+            'rgba(46, 213, 115, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(153, 102, 255, 0.8)'
+        ],
+        borderColor: [
+            '#00bfff',
+            '#2ed573',
+            '#ffce56',
+            '#ff6384',
+            '#9966ff'
+        ],
+        borderWidth: 2
+    }]
+};
+
+const paymentMethodComparisonData = {
+    labels: ['PIX', 'Boleto', 'Transferência', 'Cartão', 'Dinheiro'],
+    datasets: [{
+        label: 'Volume (R$)',
+        data: [45000, 32000, 18000, 12000, 5000],
+        backgroundColor: [
+            'rgba(46, 213, 115, 0.8)',
+            'rgba(0, 191, 255, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(153, 102, 255, 0.8)'
+        ],
+        borderColor: [
+            '#2ed573',
+            '#00bfff',
+            '#ffce56',
+            '#ff6384',
+            '#9966ff'
+        ],
+        borderWidth: 2
+    }]
+};
+
+const userActivityHeatmapData = {
+    labels: ['00h', '02h', '04h', '06h', '08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'],
+    datasets: [{
+        label: 'Segunda',
+        data: [2, 1, 0, 1, 8, 15, 25, 30, 28, 20, 12, 5],
+        backgroundColor: 'rgba(0, 191, 255, 0.6)',
+        borderColor: '#00bfff',
+        borderWidth: 1
+    }, {
+        label: 'Terça',
+        data: [1, 0, 0, 2, 10, 18, 28, 32, 30, 22, 15, 7],
+        backgroundColor: 'rgba(46, 213, 115, 0.6)',
+        borderColor: '#2ed573',
+        borderWidth: 1
+    }, {
+        label: 'Quarta',
+        data: [3, 2, 1, 1, 9, 16, 26, 29, 27, 19, 13, 6],
+        backgroundColor: 'rgba(255, 206, 86, 0.6)',
+        borderColor: '#ffce56',
+        borderWidth: 1
+    }, {
+        label: 'Quinta',
+        data: [2, 1, 0, 2, 11, 19, 29, 33, 31, 23, 16, 8],
+        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+        borderColor: '#ff6384',
+        borderWidth: 1
+    }, {
+        label: 'Sexta',
+        data: [1, 0, 0, 1, 7, 14, 24, 28, 26, 18, 11, 4],
+        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+        borderColor: '#9966ff',
+        borderWidth: 1
+    }]
+};
+
+const processingSpeedData = {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+    datasets: [{
+        label: 'Tempo Médio (min)',
+        data: [18, 16, 14, 12, 10, 8],
+        borderColor: '#ff6b6b',
+        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }, {
+        label: 'Meta (min)',
+        data: [15, 15, 15, 15, 15, 15],
+        borderColor: '#2ed573',
+        backgroundColor: 'rgba(46, 213, 115, 0.1)',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        fill: false
+    }]
+};
+
+const errorRateByUserData = {
+    labels: ['João Silva', 'Maria Santos', 'Pedro Costa', 'Ana Lima', 'Carlos Souza', 'Lucia Oliveira'],
+    datasets: [{
+        label: 'Taxa de Erro (%)',
+        data: [2, 1, 3, 1, 4, 2],
+        backgroundColor: [
+            'rgba(46, 213, 115, 0.8)',
+            'rgba(46, 213, 115, 0.8)',
+            'rgba(255, 206, 86, 0.8)',
+            'rgba(46, 213, 115, 0.8)',
+            'rgba(255, 99, 132, 0.8)',
+            'rgba(46, 213, 115, 0.8)'
+        ],
+        borderColor: [
+            '#2ed573',
+            '#2ed573',
+            '#ffce56',
+            '#2ed573',
+            '#ff6384',
+            '#2ed573'
+        ],
+        borderWidth: 2
+    }]
+};
+
+const cashFlowData = {
+    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+    datasets: [{
+        label: 'Entradas (R$ mil)',
+        data: [85, 95, 110, 125, 140, 155],
+        borderColor: '#2ed573',
+        backgroundColor: 'rgba(46, 213, 115, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }, {
+        label: 'Saídas (R$ mil)',
+        data: [70, 75, 80, 85, 90, 95],
+        borderColor: '#ff6b6b',
+        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4
+    }]
+};
+
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -230,24 +558,20 @@ function configureUserMenu(userType) {
     const btnAdmin = document.getElementById('btn-admin');
     const btnComprovantes = document.getElementById('btn-comprovantes');
     const btnFinance = document.getElementById('btn-finance');
-    const btnQuality = document.getElementById('btn-quality');
     
     // Esconder todos os botões específicos primeiro
     if (btnSupervisor) btnSupervisor.style.display = 'none';
     if (btnAdmin) btnAdmin.style.display = 'none';
     if (btnFinance) btnFinance.style.display = 'none';
-    if (btnQuality) btnQuality.style.display = 'none';
     
     // Mostrar botões baseado no tipo de usuário
     switch(userType) {
         case 'supervisor':
             if (btnSupervisor) btnSupervisor.style.display = 'flex';
-            if (btnQuality) btnQuality.style.display = 'flex';
             break;
         case 'admin':
             if (btnAdmin) btnAdmin.style.display = 'flex';
             if (btnFinance) btnFinance.style.display = 'flex';
-            if (btnQuality) btnQuality.style.display = 'flex';
             break;
         case 'conciliador':
             // Conciliador só vê dashboard e comprovantes
@@ -421,15 +745,93 @@ function initializeCharts() {
             });
         }
         
+        // Gráfico de tendência (Dashboard principal)
+        const trendCtx = document.getElementById('trendChart');
+        if (trendCtx && trendCtx.offsetParent !== null) {
+            chartInstances.trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: trendData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(0, 191, 255, 0.2)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(0, 191, 255, 0.2)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Gráfico por horário (Dashboard principal)
+        const hourlyCtx = document.getElementById('hourlyChart');
+        if (hourlyCtx && hourlyCtx.offsetParent !== null) {
+            chartInstances.hourlyChart = new Chart(hourlyCtx, {
+                type: 'bar',
+                data: hourlyData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(0, 191, 255, 0.2)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(0, 191, 255, 0.2)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
         // Gráficos do Supervisor
         initializeSupervisorCharts();
         
         // Gráficos do Admin
         initializeAdminCharts();
 
-        // Gráficos Financeiros e Qualidade
+        // Gráficos Financeiros
         initializeFinanceCharts();
-        initializeQualityCharts();
+        
+        // Novos gráficos sugeridos (apenas os mantidos)
+        initializeNewCharts();
     }, 200);
 }
 
@@ -473,12 +875,12 @@ function initializeSupervisorCharts() {
         });
     }
     
-    // Status dos Comprovantes
-    const supervisorChart2Ctx = document.getElementById('supervisorChart2');
-    if (supervisorChart2Ctx && supervisorChart2Ctx.offsetParent !== null) {
-        chartInstances.supervisorChart2 = new Chart(supervisorChart2Ctx, {
-            type: 'doughnut',
-            data: supervisorStatusData,
+    // Comparação Mensal
+    const supervisorChart4Ctx = document.getElementById('supervisorChart4');
+    if (supervisorChart4Ctx && supervisorChart4Ctx.offsetParent !== null) {
+        chartInstances.supervisorChart4 = new Chart(supervisorChart4Ctx, {
+            type: 'bar',
+            data: supervisorMonthlyComparisonData,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -486,6 +888,24 @@ function initializeSupervisorCharts() {
                     legend: {
                         labels: {
                             color: '#ffffff'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(0, 191, 255, 0.2)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(0, 191, 255, 0.2)'
                         }
                     }
                 }
@@ -613,49 +1033,46 @@ function initializeFinanceCharts() {
     if (kpiCats) kpiCats.textContent = financeCategoryData.labels.length;
 }
 
-// Inicializar gráficos Qualidade
-function initializeQualityCharts() {
-    const qualityChart1Ctx = document.getElementById('qualityChart1');
-    if (qualityChart1Ctx && qualityChart1Ctx.offsetParent !== null) {
-        chartInstances.qualityChart1 = new Chart(qualityChart1Ctx, {
-            type: 'pie',
-            data: qualityApprovalData,
+
+// Inicializar novos gráficos sugeridos (apenas os mantidos)
+function initializeNewCharts() {
+    // Gráfico de Distribuição de Valores
+    const valueDistributionCtx = document.getElementById('valueDistributionChart');
+    if (valueDistributionCtx && valueDistributionCtx.offsetParent !== null) {
+        chartInstances.valueDistributionChart = new Chart(valueDistributionCtx, {
+            type: 'bar',
+            data: valueDistributionData,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#ffffff' } } }
-            }
-        });
-    }
-    const qualityChart2Ctx = document.getElementById('qualityChart2');
-    if (qualityChart2Ctx && qualityChart2Ctx.offsetParent !== null) {
-        chartInstances.qualityChart2 = new Chart(qualityChart2Ctx, {
-            type: 'line',
-            data: qualityTMAWeeklyData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { labels: { color: '#ffffff' } } },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#ffffff'
+                        }
+                    }
+                },
                 scales: {
-                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
-                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                    x: {
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(0, 191, 255, 0.2)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#ffffff'
+                        },
+                        grid: {
+                            color: 'rgba(0, 191, 255, 0.2)'
+                        }
+                    }
                 }
             }
         });
     }
-    // KPIs simulados (exemplo)
-    const aprov = qualityApprovalData.datasets[0].data[0];
-    const reje = qualityApprovalData.datasets[0].data[1];
-    const taxaAprovacao = Math.round((aprov / (aprov + reje)) * 100);
-    const tma = qualityTMAWeeklyData.datasets[0].data.slice(-1)[0];
-    const kpiAprov = document.getElementById('kpiAprovacao');
-    const kpiTMA = document.getElementById('kpiTMA');
-    const kpiAlertas = document.getElementById('kpiAlertas');
-    const kpiRevisoes = document.getElementById('kpiRevisoes');
-    if (kpiAprov) kpiAprov.textContent = `${taxaAprovacao}%`;
-    if (kpiTMA) kpiTMA.textContent = `${tma}m`;
-    if (kpiAlertas) kpiAlertas.textContent = `${reje}`;
-    if (kpiRevisoes) kpiRevisoes.textContent = `${Math.max(0, reje - 5)}`;
 }
 
 // Aplicar filtros

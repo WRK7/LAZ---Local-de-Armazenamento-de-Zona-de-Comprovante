@@ -1,5 +1,10 @@
 ## Guia do Front-end (LAZ)
 
+### Credenciais de Login
+- **Conciliador**: `conc123`
+- **Supervisor**: `sup456` 
+- **Admin**: `admin123`
+
 ### Estrutura
 - `index.html`: marcação das telas; menu superior com botões e `data-screen` para navegação.
 - `styles.css`: tema TRON (dark + azul neon), animações e componentes.

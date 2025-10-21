@@ -81,9 +81,9 @@
                     <i class="fas fa-sack-dollar"></i>
                     Financeiro
                 </button>
-                <button class="menu-btn" onclick="showScreen('quality-dashboard')" id="btn-quality" style="display: none;" data-screen="quality-dashboard">
-                    <i class="fas fa-bullseye"></i>
-                    Qualidade
+                <button class="menu-btn" onclick="showScreen('performance-dashboard')" id="btn-performance" style="display: none;" data-screen="performance-dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Performance
                 </button>
                 <button class="menu-btn" onclick="showScreen('supervisor-dashboard')" id="btn-supervisor" style="display: none;" data-screen="supervisor-dashboard">
                     <i class="fas fa-user-tie"></i>
@@ -168,6 +168,10 @@
                     <div class="chart-container">
                         <h3>Desempenho Últimos 7 Dias</h3>
                         <canvas id="weeklyChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Distribuição de Valores</h3>
+                        <canvas id="valueDistributionChart"></canvas>
                     </div>
                 </div>
 
@@ -352,8 +356,8 @@
                             <i class="fas fa-file-invoice"></i>
                         </div>
                         <div class="kpi-content">
-                            <h3>Comprovantes Pendentes</h3>
-                            <span class="kpi-value">47</span>
+                            <h3>Total de Comprovantes</h3>
+                            <span class="kpi-value">1.247</span>
                         </div>
                     </div>
                     
@@ -362,8 +366,8 @@
                             <i class="fas fa-dollar-sign"></i>
                         </div>
                         <div class="kpi-content">
-                            <h3>Valor Total Pendente</h3>
-                            <span class="kpi-value">R$ 125.430,50</span>
+                            <h3>Valor Total</h3>
+                            <span class="kpi-value">R$ 2.145.230,50</span>
                         </div>
                     </div>
                     
@@ -372,8 +376,8 @@
                             <i class="fas fa-chart-line"></i>
                         </div>
                         <div class="kpi-content">
-                            <h3>Eficiência Geral</h3>
-                            <span class="kpi-value">87%</span>
+                            <h3>Crescimento vs Mês Anterior</h3>
+                            <span class="kpi-value">+12%</span>
                         </div>
                     </div>
                 </div>
@@ -385,8 +389,8 @@
                         <canvas id="supervisorChart1"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3>Status dos Comprovantes</h3>
-                        <canvas id="supervisorChart2"></canvas>
+                        <h3>Comparação Mensal</h3>
+                        <canvas id="supervisorChart4"></canvas>
                     </div>
                 </div>
 
@@ -480,40 +484,57 @@
                         <h3>Receita Diária (últimos 30 dias)</h3>
                         <canvas id="financeChart2"></canvas>
                     </div>
+                    <div class="chart-container">
+                        <h3>Comparação Trimestral</h3>
+                        <canvas id="financeChart3"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Projeção de Receita</h3>
+                        <canvas id="financeChart4"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Dashboard Qualidade -->
-        <div id="quality-dashboard" class="content-screen">
+
+        <!-- Dashboard Performance -->
+        <div id="performance-dashboard" class="content-screen">
             <div class="dashboard-container">
-                <h1 class="page-title">Dashboard de Qualidade</h1>
+                <h1 class="page-title">Dashboard de Performance</h1>
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <div class="kpi-icon"><i class="fas fa-percentage"></i></div>
-                        <div class="kpi-content"><h3>Taxa de Aprovação</h3><span class="kpi-value" id="kpiAprovacao">0%</span></div>
+                        <div class="kpi-icon"><i class="fas fa-rocket"></i></div>
+                        <div class="kpi-content"><h3>Velocidade Média</h3><span class="kpi-value" id="kpiVelocidade">0/min</span></div>
                     </div>
                     <div class="kpi-card">
-                        <div class="kpi-icon"><i class="fas fa-hourglass-half"></i></div>
-                        <div class="kpi-content"><h3>Tempo Médio de Análise</h3><span class="kpi-value" id="kpiTMA">0m</span></div>
+                        <div class="kpi-icon"><i class="fas fa-chart-area"></i></div>
+                        <div class="kpi-content"><h3>Produtividade</h3><span class="kpi-value" id="kpiProdutividade">0%</span></div>
                     </div>
                     <div class="kpi-card">
-                        <div class="kpi-icon"><i class="fas fa-triangle-exclamation"></i></div>
-                        <div class="kpi-content"><h3>Alertas de Inconsistência</h3><span class="kpi-value" id="kpiAlertas">0</span></div>
+                        <div class="kpi-icon"><i class="fas fa-clock"></i></div>
+                        <div class="kpi-content"><h3>Tempo de Resposta</h3><span class="kpi-value" id="kpiResposta">0ms</span></div>
                     </div>
                     <div class="kpi-card">
-                        <div class="kpi-icon"><i class="fas fa-shield-halved"></i></div>
-                        <div class="kpi-content"><h3>Revisões Necessárias</h3><span class="kpi-value" id="kpiRevisoes">0</span></div>
+                        <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                        <div class="kpi-content"><h3>Usuários Ativos</h3><span class="kpi-value" id="kpiUsuariosAtivos">0</span></div>
                     </div>
                 </div>
                 <div class="charts-grid">
                     <div class="chart-container">
-                        <h3>Aprovação vs Rejeição</h3>
-                        <canvas id="qualityChart1"></canvas>
+                        <h3>Performance por Hora</h3>
+                        <canvas id="performanceChart1"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3>TMA por Semana</h3>
-                        <canvas id="qualityChart2"></canvas>
+                        <h3>Comparação de Métricas</h3>
+                        <canvas id="performanceChart2"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Heatmap de Atividade</h3>
+                        <canvas id="performanceChart3"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Tendência de Performance</h3>
+                        <canvas id="performanceChart4"></canvas>
                     </div>
                 </div>
             </div>
