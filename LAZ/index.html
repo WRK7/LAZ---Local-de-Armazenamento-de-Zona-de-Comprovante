@@ -175,7 +175,7 @@
                     </div>
                 </div>
 
-                <!-- Ranking Top 10 -->
+                <!-- Ranking Top 10 Comprovantes -->
                 <div class="ranking-section">
                     <h3>Top 10 Maiores Comprovantes</h3>
                     <div class="ranking-table">
@@ -232,13 +232,55 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Ranking de Conciliadores -->
+                <div class="ranking-section">
+                    <h3>🏆 Ranking de Conciliadores</h3>
+                    <div class="ranking-stats">
+                        <div class="stat-info">
+                            <i class="fas fa-users"></i>
+                            <span>10 Conciliadores Ativos</span>
+                        </div>
+                        <div class="stat-info">
+                            <i class="fas fa-file-invoice"></i>
+                            <span>574 Comprovantes Totais</span>
+                        </div>
+                        <div class="stat-info">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>R$ 287.182,75 em Valores</span>
+                        </div>
+                    </div>
+                    <div class="ranking-table" id="conciliadoresRankingTable">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Posição</th>
+                                    <th>Nome</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor Total</th>
+                                    <th>Média</th>
+                                    <th>Performance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Meus Comprovantes -->
         <div id="comprovantes" class="content-screen">
             <div class="comprovantes-container">
-                <h1 class="page-title">Meus Comprovantes</h1>
+                <div class="page-header">
+                    <h1 class="page-title">Meus Comprovantes</h1>
+                    <button class="upload-btn" onclick="abrirUploadModal()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Adicionar Comprovante
+                    </button>
+                </div>
                 
                 <!-- Filtros -->
                 <div class="filters-section">
@@ -450,6 +492,19 @@
                         </table>
                     </div>
                 </div>
+
+                <!-- Gerenciamento de Conciliadores -->
+                <div class="ranking-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-user-cog"></i> Gerenciamento de Conciliadores</h3>
+                        <button class="btn-primary" onclick="abrirModalGerenciarConciliador(null)">
+                            <i class="fas fa-plus"></i> Adicionar Conciliador
+                        </button>
+                    </div>
+                    <div class="conciliadores-grid" id="conciliadoresGrid">
+                        <!-- Preenchido via JavaScript -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -628,6 +683,32 @@
                     </div>
                 </div>
 
+                <!-- Gerenciamento de Supervisores -->
+                <div class="ranking-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-user-tie"></i> Gerenciamento de Supervisores</h3>
+                        <button class="btn-primary" onclick="abrirModalGerenciarSupervisor(null)">
+                            <i class="fas fa-plus"></i> Adicionar Supervisor
+                        </button>
+                    </div>
+                    <div class="conciliadores-grid" id="supervisoresGrid">
+                        <!-- Preenchido via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Gerenciamento de Conciliadores (Admin) -->
+                <div class="ranking-section">
+                    <div class="section-header">
+                        <h3><i class="fas fa-user-cog"></i> Gerenciamento de Conciliadores</h3>
+                        <button class="btn-primary" onclick="abrirModalGerenciarConciliador(null)">
+                            <i class="fas fa-plus"></i> Adicionar Conciliador
+                        </button>
+                    </div>
+                    <div class="conciliadores-grid" id="adminConciliadoresGrid">
+                        <!-- Preenchido via JavaScript -->
+                    </div>
+                </div>
+
                 <!-- Controles Administrativos -->
                 <div class="admin-controls">
                     <h3>Controles Administrativos</h3>
@@ -766,6 +847,179 @@
                     <i class="fas fa-search"></i>
                     <p>Digite algo para começar a buscar</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Gerenciamento de Supervisor -->
+    <div id="gerenciarSupervisorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalSupervisorTitulo">Adicionar Supervisor</h2>
+                <button class="modal-close" onclick="fecharModalGerenciarSupervisor()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formSupervisor" onsubmit="salvarSupervisor(event)">
+                    <div class="input-group">
+                        <label for="supervisorNome">Nome Completo:</label>
+                        <input type="text" id="supervisorNome" placeholder="Digite o nome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="supervisorEmail">Email:</label>
+                        <input type="email" id="supervisorEmail" placeholder="exemplo@email.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="supervisorUsuario">Usuário:</label>
+                        <input type="text" id="supervisorUsuario" placeholder="nomeusuario" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="supervisorSenha">Senha:</label>
+                        <input type="password" id="supervisorSenha" placeholder="Senha segura">
+                        <small style="color: rgba(255,255,255,0.6)">Deixe em branco para manter a senha atual</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="supervisorTelefone">Telefone:</label>
+                        <input type="tel" id="supervisorTelefone" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="input-group">
+                        <label for="supervisorStatus">Status:</label>
+                        <select id="supervisorStatus">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="suspenso">Suspenso</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="supervisorId">
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="fecharModalGerenciarSupervisor()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="button" class="btn-danger" onclick="confirmarExclusaoSupervisor()" style="display: none;" id="btnExcluirSupervisor">
+                            <i class="fas fa-trash"></i> Excluir Permanentemente
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Gerenciamento de Conciliador -->
+    <div id="gerenciarConciliadorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalConciliadorTitulo">Adicionar Conciliador</h2>
+                <button class="modal-close" onclick="fecharModalGerenciarConciliador()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formConciliador" onsubmit="salvarConciliador(event)">
+                    <div class="input-group">
+                        <label for="conciliadorNome">Nome Completo:</label>
+                        <input type="text" id="conciliadorNome" placeholder="Digite o nome" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="conciliadorEmail">Email:</label>
+                        <input type="email" id="conciliadorEmail" placeholder="exemplo@email.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="conciliadorUsuario">Usuário:</label>
+                        <input type="text" id="conciliadorUsuario" placeholder="nomeusuario" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="conciliadorSenha">Senha:</label>
+                        <input type="password" id="conciliadorSenha" placeholder="Senha segura">
+                        <small style="color: rgba(255,255,255,0.6)">Deixe em branco para manter a senha atual</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="conciliadorTelefone">Telefone:</label>
+                        <input type="tel" id="conciliadorTelefone" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="input-group">
+                        <label for="conciliadorStatus">Status:</label>
+                        <select id="conciliadorStatus">
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                            <option value="suspenso">Suspenso</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="conciliadorId">
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="fecharModalGerenciarConciliador()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="button" class="btn-danger" onclick="confirmarExclusaoConciliador()" style="display: none;" id="btnExcluirConciliador">
+                            <i class="fas fa-trash"></i> Excluir Permanentemente
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Upload -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Adicionar Comprovante</h2>
+                <button class="modal-close" onclick="fecharUploadModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" onsubmit="processarUpload(event)">
+                    <div class="input-group">
+                        <label for="uploadData">Data do Comprovante:</label>
+                        <input type="date" id="uploadData" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="uploadValor">Valor:</label>
+                        <input type="text" id="uploadValor" placeholder="R$ 0,00" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="uploadCategoria">Categoria:</label>
+                        <select id="uploadCategoria" required>
+                            <option value="">Selecione uma categoria</option>
+                            <option value="PIX">PIX</option>
+                            <option value="Boleto Bancário">Boleto Bancário</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="Cartão">Cartão</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="uploadObservacoes">Observações:</label>
+                        <textarea id="uploadObservacoes" rows="3" placeholder="Descreva o comprovante..."></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="uploadArquivo">Anexar Arquivo:</label>
+                        <div class="file-upload-area">
+                            <input type="file" id="uploadArquivo" accept=".pdf,.jpg,.jpeg,.png">
+                            <label for="uploadArquivo" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Clique para selecionar ou arraste o arquivo</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" onclick="fecharUploadModal()">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-check"></i>
+                            Adicionar Comprovante
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

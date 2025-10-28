@@ -502,7 +502,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSearch();
     initializeKeyboardShortcuts();
     initializeFavoritos();
-    // Render inicial da tabela de comprovantes ao carregar (se visível depois do login)
+    // Render inicial do ranking de conciliadores
+    atualizarRankingConciliadores();
 });
 
 function initializeApp() {
@@ -630,6 +631,12 @@ function showScreen(screenName) {
         setTimeout(() => {
             if (screenName === 'dashboard' || screenName === 'supervisor-dashboard' || screenName === 'admin-dashboard') {
                 initializeCharts();
+            }
+            if (screenName === 'dashboard') {
+                atualizarRankingConciliadores();
+            }
+            if (screenName === 'supervisor-dashboard') {
+                atualizarRankingConciliadores();
             }
             if (screenName === 'comprovantes') {
                 renderComprovantesTable(comprovantesData);
@@ -830,6 +837,9 @@ function initializeCharts() {
         // Gráficos Financeiros
         initializeFinanceCharts();
         
+        // Gráficos de Performance
+        initializePerformanceCharts();
+        
         // Novos gráficos sugeridos (apenas os mantidos)
         initializeNewCharts();
     }, 200);
@@ -1019,6 +1029,43 @@ function initializeFinanceCharts() {
             }
         });
     }
+    
+    // Gráfico de Comparação Trimestral
+    const financeChart3Ctx = document.getElementById('financeChart3');
+    if (financeChart3Ctx && financeChart3Ctx.offsetParent !== null) {
+        chartInstances.financeChart3 = new Chart(financeChart3Ctx, {
+            type: 'bar',
+            data: financeQuarterlyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    
+    // Gráfico de Projeção
+    const financeChart4Ctx = document.getElementById('financeChart4');
+    if (financeChart4Ctx && financeChart4Ctx.offsetParent !== null) {
+        chartInstances.financeChart4 = new Chart(financeChart4Ctx, {
+            type: 'line',
+            data: financeProjectionData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    
     // KPIs simulados (exemplo)
     const receitaMes = financeDailyData.datasets[0].data.reduce((a, b) => a + b, 0);
     const ticketMedio = receitaMes / Math.max(1, financeDailyData.datasets[0].data.length);
@@ -1031,6 +1078,87 @@ function initializeFinanceCharts() {
     if (kpiTicket) kpiTicket.textContent = `R$ ${ticketMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
     if (kpiCresc) kpiCresc.textContent = `${crescimento}%`;
     if (kpiCats) kpiCats.textContent = financeCategoryData.labels.length;
+}
+
+// Inicializar gráficos de Performance
+function initializePerformanceCharts() {
+    const performanceChart1Ctx = document.getElementById('performanceChart1');
+    if (performanceChart1Ctx && performanceChart1Ctx.offsetParent !== null) {
+        chartInstances.performanceChart1 = new Chart(performanceChart1Ctx, {
+            type: 'line',
+            data: performanceHourlyData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    
+    const performanceChart2Ctx = document.getElementById('performanceChart2');
+    if (performanceChart2Ctx && performanceChart2Ctx.offsetParent !== null) {
+        chartInstances.performanceChart2 = new Chart(performanceChart2Ctx, {
+            type: 'radar',
+            data: performanceMetricsData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    r: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    
+    const performanceChart3Ctx = document.getElementById('performanceChart3');
+    if (performanceChart3Ctx && performanceChart3Ctx.offsetParent !== null) {
+        chartInstances.performanceChart3 = new Chart(performanceChart3Ctx, {
+            type: 'bar',
+            data: performanceHeatmapData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    
+    const performanceChart4Ctx = document.getElementById('performanceChart4');
+    if (performanceChart4Ctx && performanceChart4Ctx.offsetParent !== null) {
+        chartInstances.performanceChart4 = new Chart(performanceChart4Ctx, {
+            type: 'line',
+            data: performanceTrendData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#ffffff' } } },
+                scales: {
+                    x: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } },
+                    y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(0,191,255,0.2)' } }
+                }
+            }
+        });
+    }
+    
+    // Atualizar KPIs de Performance
+    const kpiVelocidade = document.getElementById('kpiVelocidade');
+    const kpiProdutividade = document.getElementById('kpiProdutividade');
+    const kpiResposta = document.getElementById('kpiResposta');
+    const kpiUsuariosAtivos = document.getElementById('kpiUsuariosAtivos');
+    
+    if (kpiVelocidade) kpiVelocidade.textContent = '125/min';
+    if (kpiProdutividade) kpiProdutividade.textContent = '92%';
+    if (kpiResposta) kpiResposta.textContent = '1.2s';
+    if (kpiUsuariosAtivos) kpiUsuariosAtivos.textContent = '47';
 }
 
 
@@ -1286,26 +1414,7 @@ particleStyle.textContent = `
 `;
 document.head.appendChild(particleStyle);
 
-// Funções para controles administrativos
-function gerenciarUsuarios() {
-    showNotification('Abrindo gerenciamento de usuários...', 'info');
-    // Implementar modal ou página de gerenciamento de usuários
-}
-
-function relatorios() {
-    showNotification('Gerando relatórios...', 'info');
-    // Implementar geração de relatórios
-}
-
-function configuracoes() {
-    showNotification('Abrindo configurações do sistema...', 'info');
-    // Implementar página de configurações
-}
-
-function backup() {
-    showNotification('Iniciando backup do sistema...', 'info');
-    // Implementar funcionalidade de backup
-}
+// Funções para controles administrativos (implementadas mais abaixo)
 
 // Inicializar indicador de scroll
 function initializeScrollIndicator() {
@@ -1368,11 +1477,543 @@ const comprovantesData = [
         categoria: 'PIX',
         observacoes: 'Pagamento via PIX instantâneo',
         favorito: false
+    },
+    {
+        id: '#004',
+        data: '08/12/2024',
+        valor: 'R$ 3.200,00',
+        status: 'Aprovado',
+        categoria: 'Boleto Bancário',
+        observacoes: 'Pagamento de honorários advocatícios',
+        favorito: false
+    },
+    {
+        id: '#005',
+        data: '05/12/2024',
+        valor: 'R$ 450,00',
+        status: 'Aprovado',
+        categoria: 'PIX',
+        observacoes: 'Recibo de serviços prestados',
+        favorito: false
+    },
+    {
+        id: '#006',
+        data: '03/12/2024',
+        valor: 'R$ 1.800,00',
+        status: 'Aprovado',
+        categoria: 'Transferência',
+        observacoes: 'Pagamento para fornecedores',
+        favorito: false
+    },
+    {
+        id: '#007',
+        data: '01/12/2024',
+        valor: 'R$ 950,00',
+        status: 'Pendente',
+        categoria: 'PIX',
+        observacoes: 'Comprovante de depósito bancário',
+        favorito: false
+    },
+    {
+        id: '#008',
+        data: '28/11/2024',
+        valor: 'R$ 2.100,00',
+        status: 'Aprovado',
+        categoria: 'Boleto Bancário',
+        observacoes: 'Recibo de aluguel',
+        favorito: false
+    },
+    {
+        id: '#009',
+        data: '25/11/2024',
+        valor: 'R$ 1.350,00',
+        status: 'Aprovado',
+        categoria: 'Transferência',
+        observacoes: 'Pagamento de salário funcionários',
+        favorito: false
+    },
+    {
+        id: '#010',
+        data: '22/11/2024',
+        valor: 'R$ 680,00',
+        status: 'Rejeitado',
+        categoria: 'PIX',
+        observacoes: 'Comprovante rejeitado por inconsistência',
+        favorito: false
+    },
+    {
+        id: '#011',
+        data: '20/11/2024',
+        valor: 'R$ 1.950,00',
+        status: 'Aprovado',
+        categoria: 'Boleto Bancário',
+        observacoes: 'Pagamento de impostos',
+        favorito: false
+    },
+    {
+        id: '#012',
+        data: '18/11/2024',
+        valor: 'R$ 550,00',
+        status: 'Aprovado',
+        categoria: 'PIX',
+        observacoes: 'Recibo de despesas operacionais',
+        favorito: false
+    },
+    {
+        id: '#013',
+        data: '15/11/2024',
+        valor: 'R$ 3.500,00',
+        status: 'Aprovado',
+        categoria: 'Transferência',
+        observacoes: 'Pagamento para terceiros',
+        favorito: false
+    },
+    {
+        id: '#014',
+        data: '12/11/2024',
+        valor: 'R$ 750,00',
+        status: 'Pendente',
+        categoria: 'PIX',
+        observacoes: 'Comprovante de reembolso',
+        favorito: false
+    },
+    {
+        id: '#015',
+        data: '10/11/2024',
+        valor: 'R$ 2.800,00',
+        status: 'Aprovado',
+        categoria: 'Boleto Bancário',
+        observacoes: 'Recibo de consultoria',
+        favorito: false
     }
 ];
 
 // Array para armazenar favoritos
 let favoritos = [];
+
+// Dados de conciliadores para ranking
+const conciliadoresData = [
+    { id: 1, nome: 'João Silva', email: 'joao.silva@email.com', usuario: 'joao.silva', telefone: '(11) 98765-4321', status: 'ativo', comprovantes: 89, valorTotal: 45230.50, mediaValor: 508.55 },
+    { id: 2, nome: 'Maria Santos', email: 'maria.santos@email.com', usuario: 'maria.santos', telefone: '(11) 98765-4322', status: 'ativo', comprovantes: 76, valorTotal: 38120.00, mediaValor: 501.58 },
+    { id: 3, nome: 'Pedro Costa', email: 'pedro.costa@email.com', usuario: 'pedro.costa', telefone: '(11) 98765-4323', status: 'ativo', comprovantes: 68, valorTotal: 32450.75, mediaValor: 477.22 },
+    { id: 4, nome: 'Ana Lima', email: 'ana.lima@email.com', usuario: 'ana.lima', telefone: '(11) 98765-4324', status: 'ativo', comprovantes: 62, valorTotal: 28560.00, mediaValor: 460.65 },
+    { id: 5, nome: 'Carlos Souza', email: 'carlos.souza@email.com', usuario: 'carlos.souza', telefone: '(11) 98765-4325', status: 'ativo', comprovantes: 55, valorTotal: 26580.50, mediaValor: 483.28 },
+    { id: 6, nome: 'Lucia Oliveira', email: 'lucia.oliveira@email.com', usuario: 'lucia.oliveira', telefone: '(11) 98765-4326', status: 'ativo', comprovantes: 51, valorTotal: 23450.75, mediaValor: 459.82 },
+    { id: 7, nome: 'Roberto Alves', email: 'roberto.alves@email.com', usuario: 'roberto.alves', telefone: '(11) 98765-4327', status: 'ativo', comprovantes: 48, valorTotal: 22180.00, mediaValor: 462.08 },
+    { id: 8, nome: 'Fernanda Costa', email: 'fernanda.costa@email.com', usuario: 'fernanda.costa', telefone: '(11) 98765-4328', status: 'ativo', comprovantes: 45, valorTotal: 20890.50, mediaValor: 464.23 },
+    { id: 9, nome: 'Paulo Santos', email: 'paulo.santos@email.com', usuario: 'paulo.santos', telefone: '(11) 98765-4329', status: 'ativo', comprovantes: 42, valorTotal: 19560.25, mediaValor: 465.72 },
+    { id: 10, nome: 'Juliana Ferreira', email: 'juliana.ferreira@email.com', usuario: 'juliana.ferreira', telefone: '(11) 98765-4330', status: 'ativo', comprovantes: 38, valorTotal: 18230.50, mediaValor: 479.75 }
+];
+
+// Dados de supervisores para gerenciamento
+const supervisoresData = [
+    { id: 1, nome: 'Maria Santos', email: 'maria.santos@portes.com', usuario: 'maria.santos', telefone: '(11) 98765-4322', status: 'ativo', conciliadoresGerenciados: 15, equipes: 3 },
+    { id: 2, nome: 'Carlos Oliveira', email: 'carlos.oliveira@portes.com', usuario: 'carlos.oliveira', telefone: '(11) 98765-4350', status: 'ativo', conciliadoresGerenciados: 12, equipes: 2 },
+    { id: 3, nome: 'Ana Paula', email: 'ana.paula@portes.com', usuario: 'ana.paula', telefone: '(11) 98765-4351', status: 'ativo', conciliadoresGerenciados: 10, equipes: 2 }
+];
+
+// Função para gerar ranking de conciliadores
+function gerarRankingConciliadores() {
+    const rankingTable = document.getElementById('conciliadoresRankingTable');
+    if (!rankingTable) return;
+    
+    const tbody = rankingTable.querySelector('tbody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    conciliadoresData.forEach((conc, index) => {
+        const pos = index + 1;
+        const medalha = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : `${pos}º`;
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span class="ranking-position">${medalha}</span></td>
+            <td><strong>${conc.nome}</strong></td>
+            <td>${conc.comprovantes}</td>
+            <td>R$ ${conc.valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>R$ ${conc.mediaValor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>
+                <span class="performance-badge ${conc.mediaValor > 500 ? 'excellent' : conc.mediaValor > 450 ? 'good' : 'normal'}">
+                    ${conc.mediaValor > 500 ? 'Excelente' : conc.mediaValor > 450 ? 'Bom' : 'Normal'}
+                </span>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Função para atualizar ranking ao carregar dashboard
+function atualizarRankingConciliadores() {
+    gerarRankingConciliadores();
+    renderGerenciamentoConciliadores();
+    
+    // Se for Admin, também renderizar grid separado
+    if (isAdmin()) {
+        renderGerenciamentoConciliadoresAdmin();
+        renderGerenciamentoSupervisores();
+    }
+}
+
+// Renderizar conciliadores no grid do Admin (separado)
+function renderGerenciamentoConciliadoresAdmin() {
+    const grid = document.getElementById('adminConciliadoresGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    conciliadoresData.forEach(conc => {
+        const card = document.createElement('div');
+        card.className = 'conciliador-card';
+        card.innerHTML = `
+            <div class="conciliador-header">
+                <div class="conciliador-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="conciliador-info">
+                    <h4>${conc.nome}</h4>
+                    <p>${conc.email}</p>
+                </div>
+                <span class="status-badge ${conc.status}">${conc.status.toUpperCase()}</span>
+            </div>
+            <div class="conciliador-stats">
+                <div class="stat-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>${conc.comprovantes}</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>R$ ${conc.valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+            </div>
+            <div class="conciliador-actions">
+                <button class="action-btn edit" onclick="editarConciliador(${conc.id})" title="Editar">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="action-btn delete" onclick="confirmarExclusaoConciliador(${conc.id})" title="Excluir">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+// Gerenciamento de Conciliadores
+function renderGerenciamentoConciliadores() {
+    const grid = document.getElementById('conciliadoresGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    conciliadoresData.forEach(conc => {
+        const card = document.createElement('div');
+        card.className = 'conciliador-card';
+        card.innerHTML = `
+            <div class="conciliador-header">
+                <div class="conciliador-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="conciliador-info">
+                    <h4>${conc.nome}</h4>
+                    <p>${conc.email}</p>
+                </div>
+                <span class="status-badge ${conc.status}">${conc.status.toUpperCase()}</span>
+            </div>
+            <div class="conciliador-stats">
+                <div class="stat-item">
+                    <i class="fas fa-file-invoice"></i>
+                    <span>${conc.comprovantes}</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>R$ ${conc.valorTotal.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                </div>
+            </div>
+            <div class="conciliador-actions">
+                <button class="action-btn edit" onclick="editarConciliador(${conc.id})" title="${!isAdmin() && conc.status !== 'ativo' ? 'Reativar' : 'Editar'}" ${!isAdmin() ? 'style="width: 100%;"' : ''}>
+                    <i class="fas fa-edit"></i> ${!isAdmin() && conc.status !== 'ativo' ? 'Reativar' : 'Editar'}
+                </button>
+                ${isAdmin() ? `
+                <button class="action-btn delete" onclick="confirmarExclusaoConciliador(${conc.id})" title="Excluir">
+                    <i class="fas fa-trash"></i>
+                </button>
+                ` : ''}
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function abrirModalGerenciarConciliador(id) {
+    const modal = document.getElementById('gerenciarConciliadorModal');
+    const titulo = document.getElementById('modalConciliadorTitulo');
+    const form = document.getElementById('formConciliador');
+    const btnExcluir = document.getElementById('btnExcluirConciliador');
+    
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        
+        if (id) {
+            const conc = conciliadoresData.find(c => c.id === id);
+            if (conc) {
+                titulo.textContent = 'Editar Conciliador';
+                document.getElementById('conciliadorId').value = conc.id;
+                document.getElementById('conciliadorNome').value = conc.nome;
+                document.getElementById('conciliadorEmail').value = conc.email;
+                document.getElementById('conciliadorUsuario').value = conc.usuario;
+                document.getElementById('conciliadorTelefone').value = conc.telefone;
+                document.getElementById('conciliadorStatus').value = conc.status;
+                if (isAdmin() && btnExcluir) btnExcluir.style.display = 'block';
+            }
+        } else {
+            titulo.textContent = 'Adicionar Conciliador';
+            form.reset();
+            document.getElementById('conciliadorId').value = '';
+            if (btnExcluir) btnExcluir.style.display = 'none';
+        }
+    }
+}
+
+function fecharModalGerenciarConciliador() {
+    const modal = document.getElementById('gerenciarConciliadorModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function salvarConciliador(event) {
+    event.preventDefault();
+    
+    const id = document.getElementById('conciliadorId').value;
+    const nome = document.getElementById('conciliadorNome').value;
+    const email = document.getElementById('conciliadorEmail').value;
+    const usuario = document.getElementById('conciliadorUsuario').value;
+    const telefone = document.getElementById('conciliadorTelefone').value;
+    const status = document.getElementById('conciliadorStatus').value;
+    
+    if (id) {
+        // Editar
+        const index = conciliadoresData.findIndex(c => c.id == id);
+        if (index !== -1) {
+            conciliadoresData[index] = {
+                ...conciliadoresData[index],
+                nome,
+                email,
+                usuario,
+                telefone,
+                status
+            };
+            showNotification('Conciliador atualizado com sucesso!', 'success');
+        }
+    } else {
+        // Adicionar
+        const novoId = Math.max(...conciliadoresData.map(c => c.id)) + 1;
+        conciliadoresData.push({
+            id: novoId,
+            nome,
+            email,
+            usuario,
+            telefone,
+            status: status || 'ativo',
+            comprovantes: 0,
+            valorTotal: 0,
+            mediaValor: 0
+        });
+        showNotification('Conciliador adicionado com sucesso!', 'success');
+    }
+    
+    renderGerenciamentoConciliadores();
+    if (isAdmin()) {
+        renderGerenciamentoConciliadoresAdmin();
+    }
+    gerarRankingConciliadores();
+    fecharModalGerenciarConciliador();
+}
+
+function editarConciliador(id) {
+    abrirModalGerenciarConciliador(id);
+}
+
+// Verificar se é Admin para mostrar botão de excluir
+function isAdmin() {
+    return currentUser && currentUser.userType === 'admin';
+}
+
+// Gerenciamento de Supervisores
+function renderGerenciamentoSupervisores() {
+    const grid = document.getElementById('supervisoresGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    supervisoresData.forEach(sup => {
+        const card = document.createElement('div');
+        card.className = 'conciliador-card';
+        card.innerHTML = `
+            <div class="conciliador-header">
+                <div class="conciliador-avatar" style="background: rgba(255, 191, 0, 0.2); border-color: rgba(255, 191, 0, 0.4);">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="conciliador-info">
+                    <h4>${sup.nome}</h4>
+                    <p>${sup.email}</p>
+                </div>
+                <span class="status-badge ${sup.status}">${sup.status.toUpperCase()}</span>
+            </div>
+            <div class="conciliador-stats">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>${sup.conciliadoresGerenciados} Conciliadores</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-layer-group"></i>
+                    <span>${sup.equipes} Equipes</span>
+                </div>
+            </div>
+            <div class="conciliador-actions">
+                <button class="action-btn edit" onclick="editarSupervisor(${sup.id})" title="Editar">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="action-btn delete" onclick="confirmarExclusaoSupervisor(${sup.id})" title="Excluir">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function abrirModalGerenciarSupervisor(id) {
+    const modal = document.getElementById('gerenciarSupervisorModal');
+    const titulo = document.getElementById('modalSupervisorTitulo');
+    const form = document.getElementById('formSupervisor');
+    const btnExcluir = document.getElementById('btnExcluirSupervisor');
+    
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        
+        if (id) {
+            const sup = supervisoresData.find(s => s.id === id);
+            if (sup) {
+                titulo.textContent = 'Editar Supervisor';
+                document.getElementById('supervisorId').value = sup.id;
+                document.getElementById('supervisorNome').value = sup.nome;
+                document.getElementById('supervisorEmail').value = sup.email;
+                document.getElementById('supervisorUsuario').value = sup.usuario;
+                document.getElementById('supervisorTelefone').value = sup.telefone;
+                document.getElementById('supervisorStatus').value = sup.status;
+                if (isAdmin()) btnExcluir.style.display = 'block';
+            }
+        } else {
+            titulo.textContent = 'Adicionar Supervisor';
+            form.reset();
+            document.getElementById('supervisorId').value = '';
+            btnExcluir.style.display = 'none';
+        }
+    }
+}
+
+function fecharModalGerenciarSupervisor() {
+    const modal = document.getElementById('gerenciarSupervisorModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function salvarSupervisor(event) {
+    event.preventDefault();
+    
+    const id = document.getElementById('supervisorId').value;
+    const nome = document.getElementById('supervisorNome').value;
+    const email = document.getElementById('supervisorEmail').value;
+    const usuario = document.getElementById('supervisorUsuario').value;
+    const telefone = document.getElementById('supervisorTelefone').value;
+    const status = document.getElementById('supervisorStatus').value;
+    
+    if (id) {
+        const index = supervisoresData.findIndex(s => s.id == id);
+        if (index !== -1) {
+            supervisoresData[index] = {
+                ...supervisoresData[index],
+                nome,
+                email,
+                usuario,
+                telefone,
+                status
+            };
+            showNotification('Supervisor atualizado com sucesso!', 'success');
+        }
+    } else {
+        const novoId = Math.max(...supervisoresData.map(s => s.id), 0) + 1;
+        supervisoresData.push({
+            id: novoId,
+            nome,
+            email,
+            usuario,
+            telefone,
+            status: status || 'ativo',
+            conciliadoresGerenciados: 0,
+            equipes: 1
+        });
+        showNotification('Supervisor adicionado com sucesso!', 'success');
+    }
+    
+    renderGerenciamentoSupervisores();
+    fecharModalGerenciarSupervisor();
+}
+
+function editarSupervisor(id) {
+    abrirModalGerenciarSupervisor(id);
+}
+
+function confirmarExclusaoSupervisor(id) {
+    if (!id) {
+        id = document.getElementById('supervisorId').value;
+    }
+    
+    if (confirm('Tem certeza que deseja excluir PERMANENTEMENTE este supervisor? Esta ação não pode ser desfeita.')) {
+        excluirSupervisor(id);
+    }
+}
+
+function excluirSupervisor(id) {
+    const index = supervisoresData.findIndex(s => s.id == id);
+    if (index !== -1) {
+        supervisoresData.splice(index, 1);
+        showNotification('Supervisor excluído permanentemente!', 'success');
+        renderGerenciamentoSupervisores();
+        fecharModalGerenciarSupervisor();
+    }
+}
+
+function confirmarExclusaoConciliador(id) {
+    if (!id) {
+        id = document.getElementById('conciliadorId').value;
+    }
+    
+    if (confirm('Tem certeza que deseja excluir PERMANENTEMENTE este conciliador? Esta ação não pode ser desfeita.')) {
+        excluirConciliador(id);
+    }
+}
+
+function excluirConciliador(id) {
+    const index = conciliadoresData.findIndex(c => c.id == id);
+    if (index !== -1) {
+        conciliadoresData.splice(index, 1);
+        showNotification('Conciliador excluído permanentemente!', 'success');
+        renderGerenciamentoConciliadores();
+        if (isAdmin()) {
+            renderGerenciamentoConciliadoresAdmin();
+        }
+        gerarRankingConciliadores();
+        fecharModalGerenciarConciliador();
+    }
+}
 
 // Inicializar Modal
 function initializeModal() {
@@ -1695,4 +2336,299 @@ function initializeFavoritos() {
             atualizarPaginaFavoritos();
         }
     };
+}
+
+// Funções de Exportação
+function exportarParaCSV() {
+    const csv = [
+        'ID,Data,Valor,Status,Categoria,Observações',
+        ...comprovantesData.map(c => 
+            `${c.id},${c.data},${c.valor},${c.status},${c.categoria},"${c.observacoes}"`
+        )
+    ].join('\n');
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `comprovantes_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showNotification('Relatório CSV exportado com sucesso!', 'success');
+}
+
+function exportarParaJSON() {
+    const json = JSON.stringify(comprovantesData, null, 2);
+    const blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `comprovantes_${new Date().toISOString().split('T')[0]}.json`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    showNotification('Relatório JSON exportado com sucesso!', 'success');
+}
+
+function exportarRelatorioPDF() {
+    // Simulando exportação PDF
+    showNotification('Gerando relatório PDF...', 'info');
+    
+    setTimeout(() => {
+        // Em produção, usaria uma biblioteca como jsPDF
+        const windowPrint = window.open('', '_blank');
+        const conteudo = `
+            <html>
+                <head>
+                    <title>Relatório de Comprovantes - LAZ</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 20px; }
+                        h1 { color: #00bfff; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                        th { background-color: #00bfff; color: white; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Relatório de Comprovantes - LAZ</h1>
+                    <p>Gerado em: ${new Date().toLocaleString('pt-BR')}</p>
+                    <p>Total de Comprovantes: ${comprovantesData.length}</p>
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Categoria</th>
+                        </tr>
+                        ${comprovantesData.map(c => `
+                            <tr>
+                                <td>${c.id}</td>
+                                <td>${c.data}</td>
+                                <td>${c.valor}</td>
+                                <td>${c.status}</td>
+                                <td>${c.categoria}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </body>
+            </html>
+        `;
+        windowPrint.document.write(conteudo);
+        windowPrint.document.close();
+        windowPrint.print();
+        showNotification('Relatório PDF gerado com sucesso!', 'success');
+    }, 1000);
+}
+
+// Funcionalidades Administrativas Expandidas
+function gerenciarUsuarios() {
+    showNotification('Abrindo gerenciamento de usuários...', 'info');
+    
+    // Criar modal de gerenciamento de usuários
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gerenciamento de Usuários</h2>
+                <button class="modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-users-grid">
+                    <div class="user-card">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>João Silva</h3>
+                        <p>Tipo: Conciliador</p>
+                        <p>Status: Ativo</p>
+                        <button class="action-btn">Editar</button>
+                    </div>
+                    <div class="user-card">
+                        <i class="fas fa-user-tie"></i>
+                        <h3>Maria Santos</h3>
+                        <p>Tipo: Supervisor</p>
+                        <p>Status: Ativo</p>
+                        <button class="action-btn">Editar</button>
+                    </div>
+                    <div class="user-card">
+                        <i class="fas fa-crown"></i>
+                        <h3>Admin</h3>
+                        <p>Tipo: Administrador</p>
+                        <p>Status: Ativo</p>
+                        <button class="action-btn">Editar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function relatorios() {
+    showNotification('Gerando relatórios...', 'info');
+    
+    // Criar modal de relatórios
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gerar Relatórios</h2>
+                <button class="modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="reports-grid">
+                    <button class="control-btn" onclick="exportarParaCSV()">
+                        <i class="fas fa-file-csv"></i>
+                        Exportar CSV
+                    </button>
+                    <button class="control-btn" onclick="exportarParaJSON()">
+                        <i class="fas fa-file-code"></i>
+                        Exportar JSON
+                    </button>
+                    <button class="control-btn" onclick="exportarRelatorioPDF()">
+                        <i class="fas fa-file-pdf"></i>
+                        Exportar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function configuracoes() {
+    showNotification('Abrindo configurações do sistema...', 'info');
+    
+    // Criar modal de configurações
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configurações do Sistema</h2>
+                <button class="modal-close" onclick="this.parentElement.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <h3>Tema</h3>
+                    <select class="form-input">
+                        <option>Tema TRON (Atual)</option>
+                        <option>Tema Claro</option>
+                        <option>Tema Escuro Alternativo</option>
+                    </select>
+                </div>
+                <div class="settings-group">
+                    <h3>Notificações</h3>
+                    <label><input type="checkbox" checked> Ativar notificações</label>
+                    <label><input type="checkbox" checked> Notificações sonoras</label>
+                </div>
+                <div class="settings-group">
+                    <h3>Dados</h3>
+                    <button class="btn-secondary" onclick="alert('Funcionalidade de backup local')">Backup Local</button>
+                    <button class="btn-secondary" onclick="alert('Funcionalidade de limpeza')">Limpar Cache</button>
+                </div>
+                <button class="btn-primary" style="width: 100%; margin-top: 20px;">
+                    <i class="fas fa-save"></i> Salvar Configurações
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function backup() {
+    showNotification('Iniciando backup do sistema...', 'info');
+    
+    setTimeout(() => {
+        showNotification('Backup realizado com sucesso!', 'success');
+    }, 2000);
+}
+
+// Funções de Upload
+function abrirUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        
+        // Preencher data atual
+        const dataInput = document.getElementById('uploadData');
+        if (dataInput) {
+            dataInput.value = new Date().toISOString().split('T')[0];
+        }
+    }
+}
+
+function fecharUploadModal() {
+    const modal = document.getElementById('uploadModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        
+        // Limpar formulário
+        const form = document.getElementById('uploadForm');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+function processarUpload(event) {
+    event.preventDefault();
+    
+    const data = document.getElementById('uploadData').value;
+    const valor = document.getElementById('uploadValor').value;
+    const categoria = document.getElementById('uploadCategoria').value;
+    const observacoes = document.getElementById('uploadObservacoes').value;
+    const arquivo = document.getElementById('uploadArquivo').files[0];
+    
+    if (!data || !valor || !categoria) {
+        showNotification('Por favor, preencha todos os campos obrigatórios!', 'error');
+        return;
+    }
+    
+    // Criar novo comprovante
+    const novoId = `#${String(comprovantesData.length + 1).padStart(3, '0')}`;
+    const dataFormatada = new Date(data).toLocaleDateString('pt-BR');
+    const valorFormatado = valor.startsWith('R$') ? valor : `R$ ${valor}`;
+    
+    const novoComprovante = {
+        id: novoId,
+        data: dataFormatada,
+        valor: valorFormatado,
+        status: 'Pendente',
+        categoria: categoria,
+        observacoes: observacoes || 'Sem observações',
+        favorito: false
+    };
+    
+    // Adicionar à lista
+    comprovantesData.unshift(novoComprovante); // Adicionar no início
+    
+    // Atualizar tabela
+    renderComprovantesTable(comprovantesData);
+    
+    showNotification(`Comprovante ${novoId} adicionado com sucesso!`, 'success');
+    fecharUploadModal();
+    
+    // Se estiver na tela de comprovantes, mostrar o novo item
+    if (currentScreen === 'comprovantes') {
+        // Scroll para o topo para ver o novo item
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
